@@ -1,262 +1,228 @@
-# AquaSense — Water Quality Monitoring & Diagnostic Platform
+# AquaSense — Water Quality Monitoring Platform
 
 > **Monitor Water · Understand Quality · Protect Life**
-> A modern, professional, browser-based environmental technology platform for physical-chemical water parameter screening, chronological trend analysis, multi-sample comparison, and publication-ready diagnostic reports.
 
----
+AquaSense is a browser-based application for recording water-sample readings, reviewing selected physical and chemical indicators, comparing samples, and generating reports.
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Key Features](#key-features)
-- [Four Core Screening Parameters](#four-core-screening-parameters)
-- [Deterministic Analysis Engine](#deterministic-analysis-engine)
-- [Tech Stack](#tech-stack)
-- [Project Architecture](#project-architecture)
-- [Installation & Local Setup](#installation--local-setup)
-- [Step-by-Step GitHub Upload Instructions](#step-by-step-github-upload-instructions)
-- [Deployment Guide](#deployment-guide)
-- [Important Scientific Limitations & Disclaimer](#important-scientific-limitations--disclaimer)
-- [License](#license)
-
----
+- [Core Screening Parameters](#core-screening-parameters)
+- [Analysis and Water Quality Index](#analysis-and-water-quality-index)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Installation and Local Setup](#installation-and-local-setup)
+- [Deployment](#deployment)
+- [Scientific Limitations and Disclaimer](#scientific-limitations-and-disclaimer)
 
 ## Overview
 
-**AquaSense** is a comprehensive environmental technology application designed for water technicians, environmental monitors, students, and watershed conservationists. It delivers rapid, client-side physical-chemical screening of water samples against configurable World Health Organization (WHO) and United States Environmental Protection Agency (EPA) demonstration reference ranges.
+AquaSense is designed for students, water-monitoring teams, and people interested in learning about water quality. It lets users enter sample readings, review results against configurable screening ranges, explore trends, compare records, and export reports.
 
-The platform requires **no external subscriptions, paid APIs, or cloud database infrastructure**. All data persistence runs securely and offline in client-side LocalStorage.
+The application stores its records in the browser using LocalStorage. This means data is stored locally in the browser on the device where it was entered; it is not automatically synchronized between devices.
 
----
+The reference ranges shown in the application are intended for demonstration and screening. They should not be interpreted as a certification that water is safe to drink.
 
 ## Key Features
 
-1. **Interactive SaaS Dashboard**
-   - High-level KPIs: Total tests conducted, proportion within reference ranges, tests requiring attention, latest sample status.
-   - Chronological parameter trend visualizations powered by **Recharts**:
-     - pH trajectory with reference corridor limits (6.50–8.50).
-     - Total Dissolved Solids (TDS) bar chart with 500 mg/L threshold line.
-     - Turbidity area chart with 5.0 NTU clarity threshold.
-     - Water temperature thermal tracking curve.
-     - Donut chart showing overall compliance distribution.
-   - Date range filters: *Today*, *Last 7 Days*, *Last 30 Days*, and *All Time*.
-   - Filter toggle between Field/User records and Demonstration samples.
+### 1. Dashboard and Trends
 
-2. **Water Sample Testing & Diagnostic Form**
-   - Automated Sample ID generation (`AQ-YYYY-XXXX`) with one-click regeneration.
-   - Fields: Sample Name, Sampling Location, Date & Time, pH, TDS (mg/L), Turbidity (NTU), Temperature (°C), and Field Notes.
-   - Real-time client-side input validation with descriptive inline feedback.
-   - Quick-load preset scenarios: *Standard Tap Baseline*, *Acidic Mine Drainage*, *Turbid Stormwater Runoff*, and *High-Mineral Well*.
-   - Instant rule-based diagnostic evaluation upon submission.
+- Summary cards for recorded tests and sample status.
+- Charts for pH, total dissolved solids (TDS), turbidity, and temperature.
+- Date filters for *Today*, *Last 7 Days*, *Last 30 Days*, and *All Time*.
+- Filters to distinguish user-entered records from demonstration samples.
 
-3. **Deterministic Water Quality Analysis Engine & WQI Scoring**
-   - Evaluates each indicator against configurable screening standards.
-   - Computes a mathematical **Water Quality Index (WQI)** score (0–100) and letter grade (A through E) using weighted sub-indices.
-   - Classifies sample as **WITHIN DEMONSTRATION RANGES**, **NEEDS ATTENTION**, or **INCOMPLETE DATA**.
-   - Generates contextual, engineering-grade remediation recommendations (e.g. limestone buffering, reverse osmosis, coagulant sedimentation, thermal aeration).
+### 2. Water Sample Entry
 
-4. **Historical Records Archive & Data Mobility**
-   - Full search across sample name, ID, location, and sensory notes.
-   - Filter by Screening Status (*All*, *Within Range*, *Needs Attention*) and Origin (*All*, *Field User*, *Demo*).
-   - Multi-parameter sorting: Newest, Oldest, Highest pH, Lowest pH, Highest TDS, Highest Turbidity.
-   - Row-level actions: Open Diagnostic Report, Delete Sample.
-   - Global actions: Multi-select comparison, Clear All records, Reset to 10 Demonstration samples.
-   - **JSON Database Backup & Restore**: One-click download of the complete dataset and configuration as a `.json` backup, with instant file-upload restoration across devices.
-   - Complete RFC-4180 compliant CSV export for spreadsheet auditing.
+- Sample ID generation in the `AQ-YYYY-XXXX` format.
+- Fields for sample name, location, date and time, pH, TDS, turbidity, temperature, and notes.
+- Client-side input validation.
+- Example scenarios that can be loaded for demonstration.
+- Rule-based screening results after a sample is submitted.
 
-5. **Multi-Sample Comparison Tool**
-   - Compare 2 to 5 water sources side-by-side in a structured comparison matrix.
-   - Automated delta difference calculations ($\Delta\text{pH}$, $\Delta\text{TDS}$, $\Delta\text{Turbidity}$, $\Delta\text{Temp}$).
-   - Highlights extreme parameter divergences across sites.
-   - Comparative multi-bar charts for cross-sample visual analysis.
+### 3. Screening Results and WQI
 
-6. **Certified Report Generator**
-   - Interactive report modal with full custody details, parameter tables, and findings.
-   - One-click **Download PDF** using `jspdf` (clean vector layout with official banners and disclaimers).
-   - Browser **Print Report** action with dedicated `@media print` clean formatting.
-   - CSV export for single-sample integration into laboratory information systems (LIMS).
+- Compares entered readings with the screening ranges configured in the application.
+- Calculates a Water Quality Index (WQI) score and a corresponding grade using the application's weighted calculation.
+- Displays a screening status such as **Within Demonstration Ranges**, **Needs Attention**, or **Incomplete Data**.
+- Provides informational suggestions based on the readings.
 
-7. **Demonstration Mode**
-   - Includes 10 realistic, varied fictional water samples (pristine mountain springs, treated municipal taps, industrial stormwater, pine bog acidity, and agricultural runoff).
-   - Explicitly tagged with `DEMO DATA` to ensure clear separation from real field measurements.
-   - One-click reset to restore the original demonstration dataset.
+### 4. Sample History and Data Export
 
-8. **Educational Hub & Interactive Simulator**
-   - 9 scientific educational modules explaining water quality principles, parameter chemistry, pollution causes, and watershed conservation.
-   - Interactive live parameter sandbox with real-time sliders for simulated testing.
+- Search records by sample name, ID, location, and notes.
+- Filter records by screening status and record origin.
+- Sort records by date and selected parameter values.
+- Open a sample report or delete a record.
+- Select multiple samples for comparison.
+- Export records as CSV.
+- Download and restore a JSON backup of the application's stored data and configuration.
+- Restore the built-in demonstration records.
 
-9. **Dual-Theme Support (Light & Dark Mode)**
-   - Seamless toggle between clean scientific light mode and low-glare dark mode.
-   - Configured with Tailwind CSS v4 `@custom-variant dark`.
+### 5. Multi-Sample Comparison
 
----
+- Compare 2 to 5 samples in a side-by-side table.
+- View differences in pH, TDS, turbidity, and temperature.
+- Review charts to compare readings across samples.
 
-## Four Core Screening Parameters
+### 6. Sample Reports
 
-| Parameter | Demonstration Reference Range | Significance |
+- View sample details, parameter readings, and screening findings.
+- Download a PDF report.
+- Print a report from the browser.
+- Export an individual sample as CSV.
+
+Reports are generated by the application and are not laboratory certificates.
+
+### 7. Demonstration Mode
+
+- Includes fictional sample records for exploring the application.
+- Demonstration records are marked as **DEMO DATA**.
+- Reset the demonstration dataset to restore the example records.
+
+### 8. Educational Hub and Simulator
+
+- Educational modules about water-quality concepts and the parameters used in the application.
+- An interactive simulator for exploring example parameter readings.
+
+### 9. Light and Dark Themes
+
+- Switch between light and dark display themes.
+
+## Core Screening Parameters
+
+The application currently includes four screening parameters:
+
+| Parameter | Demonstration reference range | What it measures |
 | :--- | :--- | :--- |
-| **pH (Potential of Hydrogen)** | `6.50 – 8.50` | Logarithmic measure of acidity/alkalinity. Low pH corrodes pipes and leaches heavy metals; high pH causes mineral encrustation and inhibits chlorine disinfection. |
-| **Total Dissolved Solids (TDS)** | `≤ 500 mg/L` | Concentration of dissolved inorganic minerals and salts. Elevated TDS causes brackish taste, gastrointestinal irritation, and severe appliance scaling. |
-| **Turbidity** | `≤ 5.0 NTU` | Measure of water clarity and suspended particulate matter. Suspended particles shield waterborne pathogens from UV and chlorination disinfection. |
-| **Water Temperature** | `10.0 – 25.0 °C` | Fundamental driver of gas solubility and biological kinetics. Warmer water holds less dissolved oxygen (DO) and accelerates bacterial proliferation. |
+| **pH** | `6.50–8.50` | Indicates how acidic or alkaline a water sample is. |
+| **Total Dissolved Solids (TDS)** | `≤ 500 mg/L` | Estimates the concentration of dissolved substances in water. |
+| **Turbidity** | `≤ 5.0 NTU` | Indicates the cloudiness of water caused by suspended particles. |
+| **Water Temperature** | `10.0–25.0 °C` | Records the temperature of the sample. |
 
-*Note: Screening reference thresholds can be customized at any time via the Settings modal.*
+These are configurable demonstration screening ranges in the application. They are not a complete set of drinking-water standards, and a result within these ranges does not establish that a sample is safe to drink.
 
----
+## Analysis and Water Quality Index
 
-## Tech Stack
+AquaSense uses a deterministic, rule-based analysis process to compare the entered readings with the ranges configured in the application. It also calculates a WQI score using the weighted method implemented in the project.
 
-- **Frontend Framework**: React 19 (Functional components, React Hooks)
-- **Language**: TypeScript (Strict typing, comprehensive data models)
-- **Styling**: Tailwind CSS v4 (`@tailwindcss/vite`, `@custom-variant dark`)
-- **Data Visualization**: Recharts (Line, Bar, Area, Donut, and Radar charts)
-- **Document Generation**: jsPDF (Vector PDF report compilation)
-- **Icons**: Lucide React
-- **Data Storage**: Client-Side LocalStorage (Offline capable, zero telemetry)
-- **Build Tool**: Vite 8 & TSX
+The result is intended to help users organize and understand the recorded readings. It is not a substitute for professional interpretation or accredited laboratory analysis.
 
----
+## Technology Stack
 
-## Project Architecture
+- **Frontend:** React 19
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **Build tool:** Vite 8
+- **Charts:** Recharts
+- **PDF generation:** jsPDF
+- **Icons:** Lucide React
+- **Browser storage:** LocalStorage
 
-```
-aquasense/
-├── index.html                   # HTML entry point with fonts & metadata
-├── metadata.json                # Project capabilities & configuration
-├── package.json                 # Dependencies & build scripts
-├── tsconfig.json                # TypeScript compiler configuration
-├── vite.config.ts               # Vite configuration with Tailwind CSS plugin
-├── README.md                    # Project documentation & GitHub guide
+## Project Structure
+
+```text
+aquasense-water-monitoring/
+├── index.html
+├── metadata.json
+├── package.json
+├── tsconfig.json
+├── vite.config.ts
+├── README.md
 └── src/
-    ├── main.tsx                 # Application mount point
-    ├── App.tsx                  # Root component, routing, and global state
-    ├── index.css                # Tailwind CSS v4 layer and print rules
+    ├── main.tsx
+    ├── App.tsx
+    ├── index.css
     ├── assets/
-    │   └── images/              # High-grade laboratory & field photography
+    │   └── images/
     ├── components/
-    │   ├── Navbar.tsx           # 3-Zone top navigation & mobile drawer
-    │   ├── Footer.tsx           # Environmental science footer & disclaimers
-    │   ├── Toast.tsx            # Feedback notification system
-    │   ├── ConfirmModal.tsx     # Reusable accessible confirmation dialog
-    │   ├── SettingsModal.tsx    # Configurable screening threshold settings
-    │   └── ReportModal.tsx      # Diagnostic report viewer (PDF, Print, CSV)
+    │   ├── Navbar.tsx
+    │   ├── Footer.tsx
+    │   ├── Toast.tsx
+    │   ├── ConfirmModal.tsx
+    │   ├── SettingsModal.tsx
+    │   └── ReportModal.tsx
     ├── types/
-    │   └── water.ts             # TypeScript interfaces and data models
+    │   └── water.ts
     ├── utils/
-    │   ├── analysisEngine.ts    # Deterministic rule-based screening engine
-    │   ├── demoData.ts          # 10 diverse fictional demonstration records
-    │   ├── storage.ts           # LocalStorage, CSV export, and ID generator
-    │   └── pdfGenerator.ts      # Client-side PDF report builder
+    │   ├── analysisEngine.ts
+    │   ├── demoData.ts
+    │   ├── storage.ts
+    │   └── pdfGenerator.ts
     └── views/
-        ├── HomeView.tsx         # Hero landing, parameter guide, workflow
-        ├── DashboardView.tsx    # KPIs, Recharts trends, date filters
-        ├── TestingView.tsx      # Testing form, live validation, presets
-        ├── HistoryView.tsx      # Records table, search, multi-filters, sort
-        ├── ComparisonView.tsx   # Side-by-side comparison matrix & diffs
-        ├── EducationView.tsx    # 9 learning guides & parameter simulator
-        └── AboutView.tsx        # System architecture, mission, and roadmap
+        ├── HomeView.tsx
+        ├── DashboardView.tsx
+        ├── TestingView.tsx
+        ├── HistoryView.tsx
+        ├── ComparisonView.tsx
+        ├── EducationView.tsx
+        └── AboutView.tsx
 ```
 
----
-
-## Installation & Local Setup
+## Installation and Local Setup
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) (Version 18.0.0 or higher recommended)
-- `npm` (Version 9.0.0 or higher)
+- [Node.js](https://nodejs.org/) **20.19+ or 22.12+** (required by Vite 8).
+- npm (included with Node.js).
 
-### Steps
+### 1. Clone the repository
 
-1. **Clone or Download the Repository**:
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/aquasense-water-monitoring.git
-   cd aquasense-water-monitoring
-   ```
-
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Start the Development Server**:
-   ```bash
-   npm run dev
-   ```
-   Open your browser and navigate to `http://localhost:3000` (or the port indicated in your terminal).
-
-4. **Build for Production**:
-   ```bash
-   npm run build
-   ```
-   The compiled, production-ready static assets will be output to the `dist/` directory.
-
----
-
-## Step-by-Step GitHub Upload Instructions
-
-Follow these exact steps to push this complete project to your personal GitHub account:
-
-### 1. Initialize Git Locally
-Open your terminal in the root folder of the project:
 ```bash
-git init
-git add .
-git commit -m "Initial commit: Complete AquaSense Water Quality Monitoring Platform"
+git clone https://github.com/kumararush12/aquasense-water-monitoring.git
+cd aquasense-water-monitoring
 ```
 
-### 2. Create a New Repository on GitHub
-1. Log in to [GitHub](https://github.com).
-2. Click the **+** icon in the upper-right corner and select **New repository**.
-3. Set the Repository name to `aquasense-water-monitoring`.
-4. Choose **Public** (or **Private**).
-5. **Do NOT** check "Add a README file", ".gitignore", or "license" (we already have complete files included).
-6. Click **Create repository**.
+### 2. Install dependencies
 
-### 3. Link Remote and Push
-Copy your repository URL from GitHub and run:
 ```bash
-# Rename default branch to main
-git branch -M main
-
-# Add your GitHub repository as the origin remote
-git remote add origin https://github.com/YOUR_USERNAME/aquasense-water-monitoring.git
-
-# Push code to GitHub
-git push -u origin main
+npm install
 ```
 
-*(Replace `YOUR_USERNAME` with your actual GitHub username).*
+### 3. Start the development server
 
----
+```bash
+npm run dev
+```
 
-## Deployment Guide
+Open the local URL printed in your terminal. Vite commonly uses `http://localhost:5173`.
 
-Because AquaSense is an optimized client-side React SPA, it can be deployed for free in under two minutes to any static hosting provider:
+### 4. Create a production build
 
-### Deploying to Vercel
-1. Install the Vercel CLI: `npm i -g vercel`
-2. Run `vercel` in your project folder and follow the prompts.
-3. Or import your GitHub repository directly at [vercel.com/new](https://vercel.com/new).
+```bash
+npm run build
+```
 
-### Deploying to Netlify
-1. Drag and drop the `dist/` folder into [Netlify Drop](https://app.netlify.com/drop).
-2. Or connect your GitHub repository and set the build command to `npm run build` with publish directory `dist`.
+The production build is generated in the `dist/` directory.
 
-### Deploying to GitHub Pages
-1. Install `gh-pages`: `npm install -D gh-pages`
-2. Add `"homepage": "https://YOUR_USERNAME.github.io/aquasense-water-monitoring"` to `package.json`.
-3. Add deploy script to `package.json`: `"deploy": "gh-pages -d dist"`.
-4. Run `npm run build && npm run deploy`.
+## Deployment
 
----
+AquaSense is a client-side React application and can be deployed using a static-site hosting service that supports Vite projects.
 
-## Important Scientific Limitations & Disclaimer
+### Vercel
 
-> **SCIENTIFIC NOTICE**: AquaSense is an educational and screening platform. The rule-based evaluation of pH, TDS, Turbidity, and Temperature serves as a preliminary physical-chemical indicator. It **CANNOT** guarantee drinking water safety or substitute for accredited laboratory testing (e.g., microbiological cultures for *E. coli* or coliform pathogens, mass spectrometry for toxic heavy metals like lead and arsenic, or chromatography for synthetic pesticides and PFAS). Always escalate suspect water sources to certified analytical laboratories.
+1. Open [Vercel](https://vercel.com/).
+2. Import the `aquasense-water-monitoring` repository from GitHub.
+3. Use `npm run build` as the build command.
+4. Set `dist` as the output directory if it is not detected automatically.
+5. Follow the deployment prompts.
 
----
+### Netlify
 
-## License
+1. Open [Netlify](https://www.netlify.com/).
+2. Import the repository from GitHub.
+3. Set the build command to `npm run build`.
+4. Set the publish directory to `dist`.
+5. Deploy the site.
 
-This project is licensed under the Apache-2.0 License.
+### GitHub Pages
+
+GitHub Pages can host static sites, but a Vite project may need its base path configured to match the repository URL. Follow the [Vite static deployment guide](https://vite.dev/guide/static-deploy.html) and the GitHub Pages documentation before enabling deployment.
+
+## Scientific Limitations and Disclaimer
+
+**AquaSense is an educational and preliminary screening tool.** It evaluates only the parameters implemented in the application: pH, TDS, turbidity, and temperature. These readings alone cannot establish whether water is safe to drink.
+
+The application does not test for microbiological contamination (such as *E. coli* or coliform bacteria), toxic metals (such as lead or arsenic), pesticides, PFAS, or other contaminants that require specialized testing. A result marked as being within the application's demonstration ranges must not be treated as proof of drinking-water safety.
+
+For decisions about drinking-water safety, use appropriate sampling procedures and testing by an accredited laboratory or qualified public-health authority.
