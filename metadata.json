@@ -1,0 +1,8 @@
+{
+  "name": "AquaSense - Water Quality Monitoring System",
+  "description": "Professional scientific water quality monitoring platform with real-time analysis, parameter screening, trend visualization, comparison engine, and certified reports.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
